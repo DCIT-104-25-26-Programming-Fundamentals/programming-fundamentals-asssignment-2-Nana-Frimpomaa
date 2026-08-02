@@ -83,3 +83,189 @@
 #include <iomanip>
 using namespace std;
 
+// Student structure
+struct Student
+{
+    string name;
+    int id;
+    vector<double> scores;
+};
+
+// Function to calculate average score
+double calculateAverage(const Student& student)
+{
+    double sum = 0;
+
+    for (int i = 0; i < student.scores.size(); i++)
+    {
+        sum += student.scores[i];
+    }
+
+    if (student.scores.size() == 0)
+    {
+        return 0;
+    }
+
+    return sum / student.scores.size();
+}
+
+// Function to add a student
+void addStudent(vector<Student>& students)
+{
+    Student student;
+    int numberOfScores;
+
+    cin.ignore();
+
+    cout << "Student name: ";
+    getline(cin, student.name);
+
+    cout << "Student ID: ";
+
+    if (!(cin >> student.id))
+    {
+        cout << "That is not a number." << endl;
+        return;
+    }
+
+    cout << "How many scores? ";
+
+    if (!(cin >> numberOfScores))
+    {
+        cout << "That is not a number." << endl;
+        return;
+    }
+
+    if (numberOfScores <= 0)
+    {
+        cout << "Invalid number of scores." << endl;
+        return;
+    }
+
+    for (int i = 0; i < numberOfScores; i++)
+    {
+        double score;
+
+        cout << "Enter score " << i + 1 << ": ";
+
+        if (!(cin >> score))
+        {
+            cout << "That is not a number." << endl;
+            return;
+        }
+
+        student.scores.push_back(score);
+    }
+
+    students.push_back(student);
+
+    cout << "Student \"" << student.name << "\" added successfully." << endl;
+}
+
+// Function to display all students
+void displayStudents(const vector<Student>& students)
+{
+    if (students.empty())
+    {
+        cout << "No students found." << endl;
+        return;
+    }
+
+    cout << fixed << setprecision(2);
+
+    for (int i = 0; i < students.size(); i++)
+    {
+        cout << "\nName: " << students[i].name << endl;
+        cout << "ID: " << students[i].id << endl;
+
+        cout << "Scores: ";
+        for (int j = 0; j < students[i].scores.size(); j++)
+        {
+            cout << students[i].scores[j] << " ";
+        }
+
+        cout << endl;
+        cout << "Average: " << calculateAverage(students[i]) << endl;
+    }
+}
+
+// Function to find and display a student's average
+void displayAverage(const vector<Student>& students)
+{
+    int id;
+
+    cout << "Enter student ID: ";
+
+    if (!(cin >> id))
+    {
+        cout << "That is not a number." << endl;
+        return;
+    }
+
+    for (int i = 0; i < students.size(); i++)
+    {
+        if (students[i].id == id)
+        {
+            cout << fixed << setprecision(2);
+            cout << students[i].name << "'s average score: "
+                 << calculateAverage(students[i]) << endl;
+            return;
+        }
+    }
+
+    cout << "Student ID not found." << endl;
+}
+
+// Function to display the menu
+void displayMenu()
+{
+    cout << "\n================================" << endl;
+    cout << "   STUDENT RECORD SYSTEM MENU" << endl;
+    cout << "================================" << endl;
+    cout << "1. Add student" << endl;
+    cout << "2. Display all students" << endl;
+    cout << "3. Calculate average score" << endl;
+    cout << "4. Quit" << endl;
+    cout << "Enter your choice (1-4): ";
+}
+
+int main()
+{
+    vector<Student> students;
+    int choice;
+
+    while (true)
+    {
+        displayMenu();
+
+        if (!(cin >> choice))
+        {
+            cout << "That is not a number." << endl;
+            return 0;
+        }
+
+        switch (choice)
+        {
+            case 1:
+                addStudent(students);
+                break;
+
+            case 2:
+                displayStudents(students);
+                break;
+
+            case 3:
+                displayAverage(students);
+                break;
+
+            case 4:
+                cout << "Goodbye!" << endl;
+                return 0;
+
+            default:
+                cout << "Invalid choice. Please enter a number between 1 and 4." << endl;
+        }
+    }
+
+    return 0;
+}
